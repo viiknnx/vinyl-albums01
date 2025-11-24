@@ -1,0 +1,484 @@
+<style>
+    /* Estilos originais */
+    #vinyl-gallery * {
+        all: unset;
+    }
+
+    #vinyl-gallery {
+        all: initial !important;
+        width: 100% !important;
+        /* Aumentado um pouco para acomodar o botão + */
+        height: 250px !important;
+        margin: 30px 0 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        position: relative !important;
+        margin-left: -6px !important;
+        /* Permite rolagem horizontal se necessário */
+        overflow-x: auto;
+    }
+
+    /* Cada vinil */
+    #vinyl-gallery .vinyl {
+        all: unset !important;
+        perspective: 500px !important;
+        width: 18px !important;
+        transition: width 0.5s !important;
+        position: relative;
+        /* Impede que os vinis "encolham" se houver espaço */
+        flex-shrink: 0;
+    }
+
+    #vinyl-gallery .vinyl:hover {
+        width: 148px !important;
+    }
+
+    /* Imagens */
+    #vinyl-gallery .vinyl img {
+        all: unset !important;
+        transition: transform 0.5s, width 0.5s, height 0.5s, margin-top 0.5s !important;
+        width: 180px !important;
+        height: 180px !important;
+        transform: rotateX(0deg) rotateY(25deg) !important;
+        transform-style: preserve-3d !important;
+        border-radius: 4px !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
+        object-fit: cover !important;
+    }
+
+    #vinyl-gallery .vinyl:hover img {
+        transform: rotateX(0deg) rotateY(10deg) !important;
+        width: 188px !important;
+        height: 188px !important;
+        margin-top: -2px !important;
+    }
+
+    /* Títulos */
+    #vinyl-gallery .title {
+        color: #000000;
+        position: absolute;
+        bottom: 5px; /* Ajustado para dar espaço ao botão + */
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        white-space: nowrap; /* Impede quebra de linha */
+        overflow: hidden; /* Oculta o excesso */
+        text-overflow: ellipsis; /* Adiciona "..." */
+    }
+
+    #vinyl-gallery .vinyl:hover .title {
+        opacity: 1;
+    }
+
+    /* 🆕 Estilos para o Botão "+" e Menu */
+    .edit-button {
+        all: unset;
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 20px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+        pointer-events: none; /* Inicia invisível e sem interação */
+    }
+
+    .vinyl:hover .edit-button {
+        opacity: 1;
+        pointer-events: auto; /* Permite interação ao passar o mouse */
+    }
+
+    .edit-menu {
+        position: absolute;
+        bottom: 45px; /* Acima do botão + */
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 20;
+        display: none;
+        width: 180px;
+    }
+
+    .edit-menu button {
+        all: unset;
+        display: block;
+        width: 100%;
+        padding: 5px 10px;
+        text-align: left;
+        cursor: pointer;
+        color: #333;
+        font-size: 13px;
+    }
+
+    .edit-menu button:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Estilos para o controle de quantidade */
+    #album-control {
+        margin-bottom: 10px;
+        font-family: sans-serif;
+        font-size: 14px;
+        color: #333;
+    }
+
+    #album-control label {
+        margin-right: 10px;
+    }
+
+    #album-control input {
+        width: 50px;
+        padding: 3px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+</style>
+
+<div id="album-control">
+    <label for="num-albums">Quantos álbuns deseja exibir:</label>
+    <input type="number" id="num-albums" value="12" min="1">
+</div>
+
+<div id="vinyl-gallery">
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="ALBUMCOVERSOURCECODE" />
+        <div class="title">Artist - Album</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/fd9304595548ae4896ea8586f5b04cb6/9808371" />
+        <div class="title">LANA DEL REY - LUST FOR LIFE</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/48caa351e5dd305d649c0c646774a4af/5805700" />
+        <div class="title">LANA DEL REY - HONEYMOON</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://via.placeholder.com/300/CCCCCC/808080?text=CAPA+VAZIA" />
+        <div class="title">LANA DEL REY - ULTRAVIOLENCE</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/d4a0c729da4e379f47cff3daca6c2d99/2074981" />
+        <div class="title">RED HOT CHILI PEPPERS - CALIFORNICATION</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/b0fe96e5767f106633c973375840cebe/12026991" />
+        <div class="title">NIRVANA - IN UTERO</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/8774ffdca3e5c4af848d9fd6dde10eeb/5094206" />
+        <div class="title">METALLICA - METALLICA (REMASTERED DELUXE BOX SET)</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+
+    <div class="vinyl">
+        <img src="https://e.snmc.io/i/300/w/303bc07bd468913933577b27c7c9629d/10387102" />
+        <div class="title">LANA DEL REY - ULTRAVIOLENCE</div>
+        <div class="edit-button" onclick="toggleMenu(this)">+</div>
+        <div class="edit-menu">
+            <button onclick="editTitle(this)">1 - Editar Nome (Artista - Álbum)</button>
+            <button onclick="editImage(this, 'file')">2 - Escolher Foto do Dispositivo</button>
+            <button onclick="editImage(this, 'link')">2 - Inserir Link da Foto</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Variáveis Globais ---
+    const gallery = document.getElementById('vinyl-gallery');
+    const allVinyls = Array.from(gallery.getElementsByClassName('vinyl'));
+    const numAlbumsInput = document.getElementById('num-albums');
+    let openMenu = null; // Rastreia o menu atualmente aberto
+
+    // --- 1. Controle de Quantidade de Álbuns ---
+
+    /**
+     * Atualiza a visibilidade dos álbuns com base no valor do input.
+     */
+    function updateAlbumDisplay() {
+        const numToShow = parseInt(numAlbumsInput.value);
+
+        allVinyls.forEach((vinyl, index) => {
+            if (index < numToShow) {
+                vinyl.style.display = 'block'; // Mostra
+            } else {
+                vinyl.style.display = 'none'; // Esconde
+            }
+        });
+    }
+
+    // Inicializa a exibição e adiciona o listener de mudança
+    numAlbumsInput.addEventListener('input', updateAlbumDisplay);
+    updateAlbumDisplay(); // Chama na inicialização para esconder os excedentes.
+
+    // --- 2. Funcionalidades do Botão "+" e Menu ---
+
+    /**
+     * Alterna a visibilidade do menu de edição.
+     * @param {HTMLElement} button O botão "+" clicado.
+     */
+    function toggleMenu(button) {
+        const currentMenu = button.nextElementSibling;
+
+        // Se houver um menu aberto e não for o atual, fecha-o
+        if (openMenu && openMenu !== currentMenu) {
+            openMenu.style.display = 'none';
+        }
+
+        // Alterna a exibição do menu atual
+        if (currentMenu.style.display === 'block') {
+            currentMenu.style.display = 'none';
+            openMenu = null;
+        } else {
+            currentMenu.style.display = 'block';
+            openMenu = currentMenu;
+        }
+    }
+
+    // Fecha o menu se clicar em qualquer lugar fora dele (body)
+    document.body.addEventListener('click', function(event) {
+        if (openMenu && !openMenu.closest('.vinyl').contains(event.target)) {
+            openMenu.style.display = 'none';
+            openMenu = null;
+        }
+    });
+
+    // --- 3. Opções de Edição ---
+
+    /**
+     * Edita o título do álbum (Artista - Álbum).
+     * @param {HTMLElement} button O botão do menu clicado.
+     */
+    function editTitle(button) {
+        // Encontra o elemento 'vinyl' pai
+        const vinyl = button.closest('.vinyl');
+        const titleElement = vinyl.querySelector('.title');
+
+        const newTitle = prompt("Insira o novo nome do álbum e artista (ex: Artista - Álbum):", titleElement.textContent);
+
+        if (newTitle !== null && newTitle.trim() !== "") {
+            titleElement.textContent = newTitle.trim();
+        }
+
+        // Fecha o menu após a edição
+        button.closest('.edit-menu').style.display = 'none';
+        openMenu = null;
+    }
+
+    /**
+     * Edita a imagem da capa do álbum.
+     * @param {HTMLElement} button O botão do menu clicado.
+     * @param {string} type 'file' para upload local ou 'link' para URL.
+     */
+    function editImage(button, type) {
+        // Encontra o elemento 'vinyl' pai e a imagem
+        const vinyl = button.closest('.vinyl');
+        const imgElement = vinyl.querySelector('img');
+
+        if (type === 'link') {
+            const newLink = prompt("Insira o link (URL) da nova capa do álbum:");
+            if (newLink !== null && newLink.trim() !== "") {
+                imgElement.src = newLink.trim();
+            }
+        } else if (type === 'file') {
+            // Cria um input de arquivo temporário
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+
+            fileInput.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imgElement.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+                // Remove o input temporário
+                document.body.removeChild(fileInput);
+            };
+
+            // Adiciona e simula o clique no input de arquivo
+            document.body.appendChild(fileInput);
+            fileInput.click();
+        }
+
+        // Fecha o menu após a edição
+        button.closest('.edit-menu').style.display = 'none';
+        openMenu = null;
+    }
+</script>
